@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Group {
     private String name;
-    private List<User> users = new ArrayList<User>();
+    private List<User> users = new ArrayList<>();
     private Group parent;
 
     public Group(String name){

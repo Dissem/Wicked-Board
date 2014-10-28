@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.lambdaworks:scrypt:1.4.0'
     testCompile 'junit:junit:4.11'
 }
 
