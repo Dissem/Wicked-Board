@@ -1,28 +1,26 @@
 apply plugin: 'war'
 apply plugin: 'jetty'
-apply plugin: 'idea'
 
-group   = 'wicked-coders'
-version = '0.0.1-SNAPSHOT'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+    group = 'wicked-coders'
+    version = '0.0.1-SNAPSHOT'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    repositories {
+        mavenCentral()
+    }
+    idea {
+        module {
+            downloadJavadoc = true
+            downloadSources = true
+        }
+    }
+}
 
 [jettyRun, jettyStop]*.stopPort = 8081
 [jettyRun, jettyStop]*.stopKey = 'stop wicked board'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'com.lambdaworks:scrypt:1.4.0'
-    testCompile 'junit:junit:4.11'
-}
-
-idea {
-    module {
-        downloadJavadoc = true
-        downloadSources = true
-    }
-}

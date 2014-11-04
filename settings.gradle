@@ -1,2 +1,4 @@
-rootProject.name = 'Wicked Board'
+rootProject.name = 'WickedBoard'
+
+include 'domain'
 
