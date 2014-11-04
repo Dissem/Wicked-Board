@@ -1,15 +1,27 @@
 package ch.bfh.wickedcoders.wickedboard.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * Created by chris on 28.10.14.
  */
+@Entity
 public class Post {
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    private long id;
+
+    @ManyToOne
     private final Topic topic;
     private String title;
     private String text;
-    private LocalDateTime created;
+    private final LocalDateTime created;
     private LocalDateTime edited;
     private User user;
 
@@ -29,8 +41,18 @@ public class Post {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+        this.edited = LocalDateTime.now();
+    }
+
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+        this.edited = LocalDateTime.now();
     }
 
     public LocalDateTime getCreated() {

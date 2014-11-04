@@ -2,12 +2,17 @@ package ch.bfh.wickedcoders.wickedboard.entities;
 
 import ch.bfh.wickedcoders.wickedboard.utils.SecurityUtils;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 /**
  * Created by chris on 28.10.14.
  */
+@Entity
 public class User {
-    private String name;
+    @Id
     private String email;
+    private String name;
     private String passwordHash;
 
 
