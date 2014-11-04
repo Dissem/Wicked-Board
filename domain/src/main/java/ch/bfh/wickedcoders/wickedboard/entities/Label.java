@@ -9,10 +9,14 @@ import javax.persistence.Id;
 @Entity
 public class Label {
     @Id
-    private final String name;
+    private String name;
 
     public Label(String name) {
         this.name = name;
+    }
+
+    public Label() {
+        // JPA
     }
 
     @Override

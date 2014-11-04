@@ -16,10 +16,15 @@ public class Group {
     private String name;
     @ManyToMany(cascade = ALL, fetch = EAGER)
     private List<User> users = new ArrayList<>();
+    @OneToOne(cascade = ALL, fetch = EAGER)
     private Group parent;
 
     public Group(String name){
         this.name = name;
+    }
+
+    public Group() {
+        // JPA
     }
 
     public String getName() {

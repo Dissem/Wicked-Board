@@ -22,6 +22,10 @@ public class User {
         this.passwordHash = SecurityUtils.getHashedPassword(password);
     }
 
+    public User() {
+        // JPA
+    }
+
     public String getName() {
         return name;
     }

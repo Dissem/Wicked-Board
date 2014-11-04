@@ -18,6 +18,7 @@ public class Topic {
     private long id;
 
     private String title;
+    @OneToOne(cascade = ALL, fetch = EAGER)
     private Topic parent;
     @ManyToMany(cascade = ALL, fetch = EAGER)
     private List<Label> labels = new LinkedList<>();
@@ -26,6 +27,10 @@ public class Topic {
 
     public Topic(String title) {
         this.title = title;
+    }
+
+    public Topic() {
+        // JPA
     }
 
     public String getTitle() {
