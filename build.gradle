@@ -2,7 +2,6 @@ apply plugin: 'war'
 apply plugin: 'jetty'
 
 allprojects {
-    apply plugin: 'java'
     apply plugin: 'idea'
 
     group = 'wicked-coders'
@@ -20,6 +19,10 @@ allprojects {
             downloadSources = true
         }
     }
+}
+
+subprojects {
+    apply plugin: 'java'
 }
 
 [jettyRun, jettyStop]*.stopPort = 8081
