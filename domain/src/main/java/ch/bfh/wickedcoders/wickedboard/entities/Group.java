@@ -10,7 +10,7 @@ import static javax.persistence.FetchType.EAGER;
 /**
  * Created by chris on 28.10.14.
  */
-@Entity
+@Entity(name = "UserGroup")
 public class Group {
     @Id
     private String name;
@@ -19,7 +19,7 @@ public class Group {
     @OneToOne(cascade = ALL, fetch = EAGER)
     private Group parent;
 
-    public Group(String name){
+    public Group(String name) {
         this.name = name;
     }
 
@@ -39,7 +39,7 @@ public class Group {
         return parent;
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         users.add(user);
     }
 
