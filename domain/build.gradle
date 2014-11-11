@@ -2,6 +2,7 @@ dependencies {
     //compile dependencies are required to compile the production source of the project
     compile 'com.lambdaworks:scrypt:1.4.0'
     compile 'org.eclipse.persistence:eclipselink:2.5.1'
-    //testCompile dependencies are required to compile the test source of the project
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'com.h2database:h2:1.4.182'
+    //testCompile dependencies are required to compile the test source of the project]
+    testCompile 'junit:junit:4.11'
 }
