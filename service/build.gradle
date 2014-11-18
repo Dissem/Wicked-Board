@@ -1,0 +1,6 @@
+dependencies {
+    compile project(':domain')
+    compile 'org.modelmapper:modelmapper:0.6.1'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.springframework:spring-test:4.1.2.RELEASE'
+}

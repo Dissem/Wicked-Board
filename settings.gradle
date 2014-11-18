@@ -1,3 +1,4 @@
-rootProject.name = 'WickedBoard'//set root-project for the build
+rootProject.name = 'WickedBoard'
 
-include('domain')//include sub-project "domain"
+include('domain')
+include('service')
