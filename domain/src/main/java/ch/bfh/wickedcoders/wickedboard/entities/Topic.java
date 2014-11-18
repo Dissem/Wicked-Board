@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Topic {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private long id;
+    private Long id;
 
     private String title;
     @OneToOne(cascade = ALL, fetch = EAGER)

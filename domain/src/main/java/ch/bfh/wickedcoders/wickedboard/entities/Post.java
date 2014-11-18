@@ -14,7 +14,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Post {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne(cascade = ALL, fetch = EAGER)
     private Topic topic;

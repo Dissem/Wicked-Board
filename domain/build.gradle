@@ -3,6 +3,9 @@ dependencies {
     compile 'com.lambdaworks:scrypt:1.4.0'
     compile 'org.eclipse.persistence:eclipselink:2.5.1'
     compile 'com.h2database:h2:1.4.182'
+    compile 'javax.inject:javax.inject:1'
+    compile 'org.springframework.data:spring-data-jpa:1.7.1.RELEASE'
+    compile 'org.springframework:spring-test:4.1.2.RELEASE'
     //testCompile dependencies are required to compile the test source of the project]
     testCompile 'junit:junit:4.11'
 }
