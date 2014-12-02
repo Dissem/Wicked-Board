@@ -10,9 +10,9 @@ import java.util.Collection;
  * @author pfafs1
  */
 public interface PostService {
-    public PostDTO create(PostDTO post);
-    public PostDTO read(long id);
-    public Collection<PostDTO> list();
-    public PostDTO update(PostDTO post);
-    public void delete(PostDTO post);
+    public PostDTO create(long topicId, PostDTO post);
+    public PostDTO read(long topicId, long id);
+    public Collection<PostDTO> list(long topicId);
+    public PostDTO update(long topicId, PostDTO post);
+    public void delete(long topicId, PostDTO post);
 }

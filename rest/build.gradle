@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':service')
+    compile 'org.springframework:spring-webmvc:4.1.2.RELEASE'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.13'
+}

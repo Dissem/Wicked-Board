@@ -27,6 +27,10 @@ public class PostDTO {
         // JPA
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public TopicDTO getTopic() {
         return topic;
     }

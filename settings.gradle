@@ -1,4 +1,6 @@
 rootProject.name = 'WickedBoard'
 
-include('domain')
-include('service')
+include 'domain'
+include 'service'
+include 'rest'
+
