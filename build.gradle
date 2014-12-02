@@ -1,16 +1,9 @@
-//only for parent project
-apply plugin: 'war' //WickedBoard is a WebApp, output of parent should be a war
-apply plugin: 'jetty'//WickedBoard can be run on a jetty-server
-
 //everything configured in here applies to all projects
 allprojects {
     apply plugin: 'idea'//idea plugin
 
     group = 'wicked-coders'
     version = '0.0.1-SNAPSHOT'
-
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
 
     repositories {
         mavenCentral()//use maven repositories
@@ -26,7 +19,7 @@ allprojects {
 //everything configured in here applies to sub-projects only
 subprojects {
     apply plugin: 'java' //java-plugin for all sub-projects
-}
 
-[jettyRun, jettyStop]*.stopPort = 8081
-[jettyRun, jettyStop]*.stopKey = 'stop wicked board'
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

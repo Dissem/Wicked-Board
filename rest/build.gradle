@@ -1,3 +1,9 @@
+apply plugin: 'war' //WickedBoard is a WebApp, output of parent should be a war
+apply plugin: 'jetty'//WickedBoard can be run on a jetty-server
+
+[jettyRun, jettyStop]*.stopPort = 8081
+[jettyRun, jettyStop]*.stopKey = 'stop wicked board'
+
 dependencies {
     compile project(':service')
     compile 'org.springframework:spring-webmvc:4.1.2.RELEASE'
