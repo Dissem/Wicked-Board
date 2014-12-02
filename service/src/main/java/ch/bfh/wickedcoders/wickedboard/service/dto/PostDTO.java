@@ -1,11 +1,14 @@
 package ch.bfh.wickedcoders.wickedboard.service.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Created by chris on 28.10.14.
  */
-public class PostDTO {
+public class PostDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private TopicDTO topic;
@@ -27,16 +30,20 @@ public class PostDTO {
         // JPA
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
 
-    public TopicDTO getTopic() {
-        return topic;
+    public void setTopic(TopicDTO topic) {
+        this.topic = topic;
     }
 
-    public String getTitle() {
-        return title;
+    public TopicDTO getTopic() {
+        return topic;
     }
 
     public void setTitle(String title) {
@@ -44,8 +51,8 @@ public class PostDTO {
         this.edited = LocalDateTime.now();
     }
 
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
     public void setText(String text) {
@@ -53,12 +60,28 @@ public class PostDTO {
         this.edited = LocalDateTime.now();
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
     public LocalDateTime getCreated() {
         return created;
     }
 
+    public void setEdited(LocalDateTime edited) {
+        this.edited = edited;
+    }
+
     public LocalDateTime getEdited() {
         return edited;
+    }
+
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
     public UserDTO getUser() {

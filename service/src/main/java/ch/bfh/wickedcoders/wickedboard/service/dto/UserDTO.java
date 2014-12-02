@@ -2,10 +2,14 @@ package ch.bfh.wickedcoders.wickedboard.service.dto;
 
 import ch.bfh.wickedcoders.wickedboard.utils.SecurityUtils;
 
+import java.io.Serializable;
+
 /**
  * Created by chris on 28.10.14.
  */
-public class UserDTO {
+public class UserDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String email;
 
@@ -23,12 +27,20 @@ public class UserDTO {
         // JPA
     }
 
-    public String getName() {
-        return name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean checkPassword(String password) {

@@ -1,12 +1,15 @@
 package ch.bfh.wickedcoders.wickedboard.service.dto;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by chris on 28.10.14.
  */
-public class TopicDTO {
+public class TopicDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String title;
@@ -22,8 +25,16 @@ public class TopicDTO {
         // JPA
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getTitle() {

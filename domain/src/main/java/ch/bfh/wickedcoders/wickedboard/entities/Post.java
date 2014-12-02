@@ -12,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
  */
 @Entity
 public class Post {
+
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -37,12 +38,12 @@ public class Post {
         // JPA
     }
 
-    public Topic getTopic() {
-        return topic;
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 
-    public String getTitle() {
-        return title;
+    public Topic getTopic() {
+        return topic;
     }
 
     public void setTitle(String title) {
@@ -50,8 +51,8 @@ public class Post {
         this.edited = LocalDateTime.now();
     }
 
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
     public void setText(String text) {
@@ -59,12 +60,28 @@ public class Post {
         this.edited = LocalDateTime.now();
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
     public LocalDateTime getCreated() {
         return created;
     }
 
+    public void setEdited(LocalDateTime edited) {
+        this.edited = edited;
+    }
+
     public LocalDateTime getEdited() {
         return edited;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public User getUser() {
