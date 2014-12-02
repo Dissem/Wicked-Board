@@ -1,9 +1,9 @@
 package ch.bfh.wickedcoders.wickedboard.service.impl;
 
-import ch.bfh.wickedcoders.wickedboard.entities.User;
-import ch.bfh.wickedcoders.wickedboard.repository.UserRepository;
-import ch.bfh.wickedcoders.wickedboard.service.UserService;
-import ch.bfh.wickedcoders.wickedboard.service.dto.UserDTO;
+import ch.bfh.wickedcoders.wickedboard.entities.Group;
+import ch.bfh.wickedcoders.wickedboard.repository.GroupRepository;
+import ch.bfh.wickedcoders.wickedboard.service.GroupService;
+import ch.bfh.wickedcoders.wickedboard.service.dto.GroupDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -12,47 +12,47 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 /**
- * default implementation of {@link ch.bfh.wickedcoders.wickedboard.service.UserService}.
+ * default implementation of {@link ch.bfh.wickedcoders.wickedboard.service.GroupService}.
  *
- * @user pfafs1
+ * @group pfafs1
  */
-public class DefaultGroupService implements UserService {
+public class DefaultGroupService implements GroupService {
     @Inject
-    private UserRepository userRepository;
+    private GroupRepository groupRepository;
     private final ModelMapper mapper = new ModelMapper();
 
     @Override
-    public UserDTO create(UserDTO userDTO) {
-        User user = mapper.map(userDTO, User.class);
-        User persistedUser = userRepository.save(user);
-        return mapper.map(persistedUser, UserDTO.class);
+    public GroupDTO create(GroupDTO groupDTO) {
+        Group group = mapper.map(groupDTO, Group.class);
+        Group persistedGroup = groupRepository.save(group);
+        return mapper.map(persistedGroup, GroupDTO.class);
     }
 
     @Override
-    public UserDTO read(String name) {
-        User user = userRepository.findOne(name);
-        if (user == null) return null;
-        return mapper.map(user, UserDTO.class);
+    public GroupDTO read(String name) {
+        Group group = groupRepository.findOne(name);
+        if (group == null) return null;
+        return mapper.map(group, GroupDTO.class);
     }
 
     @Override
-    public Collection<UserDTO> list() {
-        Iterable<User> users = userRepository.findAll();
-        Type listType = new TypeToken<Collection<UserDTO>>() {
+    public Collection<GroupDTO> list() {
+        Iterable<Group> groups = groupRepository.findAll();
+        Type listType = new TypeToken<Collection<GroupDTO>>() {
         }.getType();
-        return mapper.map(users, listType);
+        return mapper.map(groups, listType);
     }
 
     @Override
-    public UserDTO update(UserDTO userDTO) {
-        User user = mapper.map(userDTO, User.class);
-        User updatedUser = userRepository.save(user);
-        return mapper.map(updatedUser, UserDTO.class);
+    public GroupDTO update(GroupDTO groupDTO) {
+        Group group = mapper.map(groupDTO, Group.class);
+        Group updatedGroup = groupRepository.save(group);
+        return mapper.map(updatedGroup, GroupDTO.class);
     }
 
     @Override
-    public void delete(UserDTO userDTO) {
-        User user = userRepository.findOne(userDTO.getName());
-        userRepository.delete(user);
+    public void delete(GroupDTO groupDTO) {
+        Group group = groupRepository.findOne(groupDTO.getName());
+        groupRepository.delete(group);
     }
 }

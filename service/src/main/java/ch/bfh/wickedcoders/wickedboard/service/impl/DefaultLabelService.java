@@ -1,9 +1,9 @@
 package ch.bfh.wickedcoders.wickedboard.service.impl;
 
-import ch.bfh.wickedcoders.wickedboard.entities.User;
-import ch.bfh.wickedcoders.wickedboard.repository.UserRepository;
-import ch.bfh.wickedcoders.wickedboard.service.UserService;
-import ch.bfh.wickedcoders.wickedboard.service.dto.UserDTO;
+import ch.bfh.wickedcoders.wickedboard.entities.Label;
+import ch.bfh.wickedcoders.wickedboard.repository.LabelRepository;
+import ch.bfh.wickedcoders.wickedboard.service.LabelService;
+import ch.bfh.wickedcoders.wickedboard.service.dto.LabelDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -12,47 +12,47 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 
 /**
- * default implementation of {@link ch.bfh.wickedcoders.wickedboard.service.UserService}.
+ * default implementation of {@link ch.bfh.wickedcoders.wickedboard.service.LabelService}.
  *
- * @user pfafs1
+ * @label pfafs1
  */
-public class DefaultLabelService implements UserService {
+public class DefaultLabelService implements LabelService {
     @Inject
-    private UserRepository userRepository;
+    private LabelRepository labelRepository;
     private final ModelMapper mapper = new ModelMapper();
 
     @Override
-    public UserDTO create(UserDTO userDTO) {
-        User user = mapper.map(userDTO, User.class);
-        User persistedUser = userRepository.save(user);
-        return mapper.map(persistedUser, UserDTO.class);
+    public LabelDTO create(LabelDTO labelDTO) {
+        Label label = mapper.map(labelDTO, Label.class);
+        Label persistedLabel = labelRepository.save(label);
+        return mapper.map(persistedLabel, LabelDTO.class);
     }
 
     @Override
-    public UserDTO read(String name) {
-        User user = userRepository.findOne(name);
-        if (user == null) return null;
-        return mapper.map(user, UserDTO.class);
+    public LabelDTO read(String name) {
+        Label label = labelRepository.findOne(name);
+        if (label == null) return null;
+        return mapper.map(label, LabelDTO.class);
     }
 
     @Override
-    public Collection<UserDTO> list() {
-        Iterable<User> users = userRepository.findAll();
-        Type listType = new TypeToken<Collection<UserDTO>>() {
+    public Collection<LabelDTO> list() {
+        Iterable<Label> labels = labelRepository.findAll();
+        Type listType = new TypeToken<Collection<LabelDTO>>() {
         }.getType();
-        return mapper.map(users, listType);
+        return mapper.map(labels, listType);
     }
 
     @Override
-    public UserDTO update(UserDTO userDTO) {
-        User user = mapper.map(userDTO, User.class);
-        User updatedUser = userRepository.save(user);
-        return mapper.map(updatedUser, UserDTO.class);
+    public LabelDTO update(LabelDTO labelDTO) {
+        Label label = mapper.map(labelDTO, Label.class);
+        Label updatedLabel = labelRepository.save(label);
+        return mapper.map(updatedLabel, LabelDTO.class);
     }
 
     @Override
-    public void delete(UserDTO userDTO) {
-        User user = userRepository.findOne(userDTO.getName());
-        userRepository.delete(user);
+    public void delete(LabelDTO labelDTO) {
+        Label label = labelRepository.findOne(labelDTO.getName());
+        labelRepository.delete(label);
     }
 }

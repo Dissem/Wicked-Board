@@ -10,9 +10,9 @@ import java.util.Collection;
  * @author pfafs1
  */
 public interface UserService {
-    public UserDTO create(UserDTO user);
+    public UserDTO create(UserDTO userDTO);
     public UserDTO read(String name);
     public Collection<UserDTO> list();
-    public UserDTO update(UserDTO user);
-    public void delete(UserDTO user);
+    public UserDTO update(UserDTO userDTO);
+    public void delete(UserDTO userDTO);
 }
