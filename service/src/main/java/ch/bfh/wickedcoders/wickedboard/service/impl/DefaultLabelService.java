@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
@@ -16,6 +17,7 @@ import java.util.Collection;
  *
  * @label pfafs1
  */
+@Named
 public class DefaultLabelService implements LabelService {
     @Inject
     private LabelRepository labelRepository;
