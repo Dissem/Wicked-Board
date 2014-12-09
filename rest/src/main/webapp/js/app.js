@@ -1,9 +1,13 @@
 (function() {
 
-    var app = angular.module('wicketBoardApp', [ ]);
+    var app = angular.module('wickedBoardApp', [ ]);
 
     app.controller('IndexController', function() {
-        this.name = "Wicket Board";
+        this.name = "Wicked Board";
+    });
+
+    app.controller('TopicController', function() {
+        // TODO
     });
 
 })();
