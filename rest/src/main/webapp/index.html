@@ -24,7 +24,7 @@
         <div ng-controller="TopicController as topicCtrl">
             {{topicCtrl.name}}
             <div class="list-topic-item" ng-repeat="topic in topicCtrl.topics">
-                {{topic.id}}
+                {{topic.title}} (#{{topic.id}})
             </div>
         </div>
     </div>
