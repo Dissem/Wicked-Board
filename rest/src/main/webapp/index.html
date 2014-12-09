@@ -8,22 +8,24 @@
     <link rel="stylesheet" href="css/app.css"/>
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/angular-route.min.js"></script>
+    <script type="text/javascript" src="js/angular-resource.min.js"></script>
+    <script type="text/javascript" src="js/services.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 </head>
-<body ng-app="wickedBoardApp" ng-controller="IndexController as idxCtrl">
+<body ng-app="wickedBoardApp">
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    {{idxCtrl.name}}
-                </a>
+                <a class="navbar-brand" href="#">Wicked Board</a>
             </div>
         </div>
     </nav>
     <div class="container">
-        <h1>{{idxCtrl.name}}</h1>
         <div ng-controller="TopicController as topicCtrl">
-            //
+            {{topicCtrl.name}}
+            <div class="list-topic-item" ng-repeat="topic in topicCtrl.topics">
+                {{topic.id}}
+            </div>
         </div>
     </div>
 </body>

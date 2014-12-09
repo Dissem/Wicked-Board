@@ -1,13 +1,9 @@
 (function() {
 
-    var app = angular.module('wickedBoardApp', [ ]);
+    var app = angular.module('wickedBoardApp', ['wickedBoardServices']);
 
-    app.controller('IndexController', function() {
-        this.name = "Wicked Board";
-    });
-
-    app.controller('TopicController', function() {
-        // TODO
-    });
+    app.controller('TopicController', ['$topic', function($topic) {
+        this.topics = $topic.query();
+    }]);
 
 })();
