@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.util.Collection;
 
-//@Controller
-//@RequestMapping("/topics/{topicId}/posts")
+@Controller
+@RequestMapping("/topics/{topicId}/posts")
 public class PostController {
 
-    //        @Inject
+    @Inject
     private PostService postService;
 
     /**
