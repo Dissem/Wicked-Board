@@ -1,0 +1,8 @@
+<div class="container">
+    <div ng-controller="TopicController as topicCtrl">
+        {{topicCtrl.name}}
+        <div class="list-topic-item" ng-repeat="topic in topicCtrl.topics">
+            {{topic.title}} (#{{topic.id}})
+        </div>
+    </div>
+</div>

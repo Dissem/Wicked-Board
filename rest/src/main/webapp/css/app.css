@@ -1,3 +1,5 @@
 body {
     padding-top: 70px;
 }
+/* fix for bootstrap ui */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }

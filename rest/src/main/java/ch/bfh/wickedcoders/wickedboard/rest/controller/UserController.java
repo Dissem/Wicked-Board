@@ -41,11 +41,15 @@ public class UserController {
     /**
      * Read
      */
-    @RequestMapping(value = "{email}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ResponseBody
-    public UserDTO read(@PathVariable String email) {
-        System.out.println("User requested with email = " + email);
-        return userService.read(email);
+    public UserDTO read(@PathVariable String email, @RequestBody String password) throws Exception {
+        System.out.println("User requested with email = " + email + "and password = " + password);
+        UserDTO userDTO = userService.read(email);
+        if (userDTO != null && userDTO.checkPassword(password)) {
+            return userDTO;
+        }
+        throw new Exception("invalid credentials");
     }
 
     /**
