@@ -1,5 +1,5 @@
 (function() {
-    var app = angular.module('wickedBoardApp', ['ui.bootstrap', 'ngRoute', 'wickedBoardServices']);
+    var app = angular.module('wickedBoardApp', ['ui.bootstrap', 'ngRoute', 'LocalStorageModule', 'wickedBoardServices']);
     app.config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'pages/index.html'
@@ -9,30 +9,39 @@
         });
     }]);
 
-    app.controller('UserController', ['$rootScope', '$scope', '$modal', '$log', 'User', function($rootScope, $scope, $modal, $log, User) {
-        $scope.user = {
-            userData: {},
-            isAuth: false
-        };
+    app.controller('UserController', ['$rootScope', '$scope', 'localStorageService', '$modal', '$log', 'User', function($rootScope, $scope, localStorageService, $modal, $log, User) {
+        //check for stored user
+        $scope.user = localStorageService.get('user');
+        if (!$scope.user) {
+            $scope.user = {
+                userData: {},
+                isAuth: false
+            };
+        }
         this.login = function(email, password) {
             if (email !== '' && password !== '') {
                 $scope.user.userData = User.login({email: email}, password,
                     function () {//success
                         $scope.user.isAuth = true;
+                        localStorageService.set('user', $scope.user);
                     },
                     function () {//error
-                        $scope.user.isAuth = false;
+                        $scope.user = {
+                            userData: {},
+                            isAuth: false
+                        };
+                        localStorageService.remove('user');
                         $log.info("invalid credentials");
                     });
             }
         };
         this.logout = function() {
-            $scope.user.isAuth = false;
-            $scope.user.userData = {};
+            $scope.user = {
+                userData: {},
+                isAuth: false
+            };
+            localStorageService.remove('user');
         };
-        this.getUsername = function () {
-            return this.user.isAuth ? this.user.userData.name : "";
-        }
         this.addUser = function(email, name, password) {
             var userData = {
                 email: email,
@@ -42,9 +51,14 @@
             $scope.user.userData = User.save(userData,
                 function() {//success
                     $scope.user.isAuth = true;
+                    localStorageService.set('user', $scope.user);
                 },
                 function () {//error
-                    $scope.user.isAuth = false;
+                    $scope.user = {
+                        userData: {},
+                        isAuth: false
+                    };
+                    localStorageService.remove('user');
                     $log.info("couldn't sign up");
                 });
         };
