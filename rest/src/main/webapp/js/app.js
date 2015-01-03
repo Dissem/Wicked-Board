@@ -9,24 +9,35 @@
         });
     }]);
 
+    app.controller('ModalController', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+        this.modalData = (data && data.modalData) ? data.modalData : {};
+        $scope.inputData = data;
+        this.ok = function () {
+            $modalInstance.close(this.modalData);
+        };
+
+        this.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }]);
     app.controller('UserController', ['$rootScope', '$scope', 'localStorageService', '$modal', '$log', 'User', function($rootScope, $scope, localStorageService, $modal, $log, User) {
         //check for stored user
-        $scope.user = localStorageService.get('user');
-        if (!$scope.user) {
-            $scope.user = {
+        $rootScope.user = localStorageService.get('user');
+        if (!$rootScope.user) {
+            $rootScope.user = {
                 userData: {},
                 isAuth: false
             };
         }
         this.login = function(email, password) {
             if (email !== '' && password !== '') {
-                $scope.user.userData = User.login({email: email}, password,
+                $rootScope.user.userData = User.login({email: email}, password,
                     function () {//success
-                        $scope.user.isAuth = true;
-                        localStorageService.set('user', $scope.user);
+                        $rootScope.user.isAuth = true;
+                        localStorageService.set('user', $rootScope.user);
                     },
                     function () {//error
-                        $scope.user = {
+                        $rootScope.user = {
                             userData: {},
                             isAuth: false
                         };
@@ -36,7 +47,7 @@
             }
         };
         this.logout = function() {
-            $scope.user = {
+            $rootScope.user = {
                 userData: {},
                 isAuth: false
             };
@@ -48,13 +59,13 @@
                 name: name,
                 password: password
             };
-            $scope.user.userData = User.save(userData,
+            $rootScope.user.userData = User.save(userData,
                 function() {//success
-                    $scope.user.isAuth = true;
-                    localStorageService.set('user', $scope.user);
+                    $rootScope.user.isAuth = true;
+                    localStorageService.set('user', $rootScope.user);
                 },
                 function () {//error
-                    $scope.user = {
+                    $rootScope.user = {
                         userData: {},
                         isAuth: false
                     };
@@ -64,23 +75,25 @@
         };
 
         this.showLogin = function () {
-            if (!$scope.user.isAuth) {
+            if (!$rootScope.user.isAuth) {
                 var modalInstance = $modal.open({
                     templateUrl: 'pages/login.html',
-                    controller: 'ModalController as modalCtrl'
+                    controller: 'ModalController as modalCtrl',
+                    resolve: {data: function () { return null; }}
                 });
                 modalInstance.result.then(function (modalData) {
-                   $scope.userCtrl.login(modalData.email, modalData.password);
+                    $scope.userCtrl.login(modalData.email, modalData.password);
                 }, function () {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
             }
         };
         this.showSignUp = function () {
-            if (!$scope.user.isAuth) {
+            if (!$rootScope.user.isAuth) {
                 var modalInstance = $modal.open({
                     templateUrl: 'pages/signup.html',
-                    controller: 'ModalController as modalCtrl'
+                    controller: 'ModalController as modalCtrl',
+                    resolve: {data: function () { return null; }}
                 });
                 modalInstance.result.then(function (modalData) {
                     $scope.userCtrl.addUser(modalData.email, modalData.name, modalData.password);
@@ -90,33 +103,100 @@
             }
         };
     }]);
-    app.controller('ModalController', ['$modalInstance', '$scope', function ($modalInstance, $scope) {
-        this.modalData = {};
-        /**this.error = false;
-        this.incomplete = false;
-        this.validate = function() {
-            if (this.modalData.password !== this.modalData.passwordRep) {
-                this.error = true;
-            } else {
-                this.error = false;
+    app.controller('TopicController', ['$rootScope', '$scope', '$modal', '$log', 'Topic', function ($rootScope, $scope, $modal, $log, Topic) {
+        this.name = 'Topics';
+        this.topics = Topic.query();
+        this.userIsAuth = function () {
+            return $rootScope.user.isAuth;
+        }
+        this.delTopic = function (topic) {
+            if (this.userIsAuth() && topic) {
+                Topic.delete({id: topic.id},
+                    function() {//success
+                        //remove from topics
+                        var index = $scope.topicCtrl.topics.indexOf(topic);
+                        if (index >= 0){
+                            $scope.topicCtrl.topics.splice(index, 1);
+                        }
+                    },
+                    function () {//error
+                        $log.info("couldn't delete topic");
+                    });
             }
-            this.incomplete = false;
-            if (!this.email.length || !this.name.length ||
-                !this.password.length || !this.passwordRep.length) {
-                this.incomplete = true;
+        }
+        this.saveTopic = function (topicId, parentId, title) {
+            if (this.userIsAuth()) {
+                var topic = {
+                    id: topicId,
+                    parentId : parentId,
+                    title: title
+                };
+                if (topicId != null) {
+                    Topic.update({id: topicId}, {parentId: parentId, title: title},
+                        function(data) {//success
+                            if (data) {
+                                //update topics
+                                var topics = $scope.topicCtrl.topics;
+                                for (i = topics.length - 1; i >= 0; i--) {
+                                    if (topics[i].id === data.id){
+                                        topics[i] = data;
+                                    }
+                                }
+                            }
+                        },
+                        function () {//error
+                            $log.info("couldn't update topic");
+                        });
+                }
+                else {
+                    Topic.save(topic,
+                        function(data) {//success
+                            if (data) {
+                                //add to topics
+                                $scope.topicCtrl.topics.push(data);
+                            }
+                        },
+                        function () {//error
+                            $log.info("couldn't update topic");
+                        });
+                }
             }
-        };*/
-        this.ok = function () {
-            $modalInstance.close(this.modalData);
-        };
+        }
+        this.showTopic = function (topicId) {
+            if (this.userIsAuth()) {
+                var topic = {};
+                if (topicId){
+                    topic = Topic.get({id: topicId},
+                        function() {//success
+                        },
+                        function () {//error
+                            $log.info("couldn't get topic");
+                        });
+                }
 
-        this.cancel = function () {
-            $modalInstance.dismiss('cancel');
+                var modalInstance = $modal.open({
+                    templateUrl: 'pages/topicForm.html',
+                    controller: 'ModalController as modalCtrl',
+                    resolve: {
+                        data: function () {
+                            return {
+                                title: (topicId) ? 'Edit Topic' : 'New Topic',
+                                topics: $scope.topicCtrl.topics,
+                                modalData: {
+                                    topic: topic
+                                }
+                            };
+                        }
+                    }
+                });
+                modalInstance.result.then(function (modalData) {
+                    $scope.topicCtrl.saveTopic(modalData.topic.id,
+                        (modalData.topic.parent) ? modalData.topic.parent.id : null,
+                        modalData.topic.title);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            }
         };
-    }]);
-    app.controller('TopicController', ['$scope', 'Topic', function ($scope, Topic) {
-        Topic.query(function(data) {
-            $scope.topics = data;
-        });
     }]);
 })();

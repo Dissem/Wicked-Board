@@ -53,6 +53,7 @@ public class TopicController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
     public TopicDTO update(@RequestBody TopicDTO topic, @PathVariable long id) {
+        topic.setId(id);
         TopicDTO updatedTopic = topicService.update(topic);
         System.out.println("Topic updated with id = " + updatedTopic.getId());
         return updatedTopic;
