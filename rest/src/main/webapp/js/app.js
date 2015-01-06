@@ -104,9 +104,14 @@
             }
         };
     }]);
-    app.controller('TopicController', ['$rootScope', '$scope', '$modal', '$log', 'Topic', function ($rootScope, $scope, $modal, $log, Topic) {
+    app.controller('TopicController', ['$rootScope', '$scope', '$routeParams', '$modal', '$log', 'Topic', 'SubTopic', function ($rootScope, $scope, $routeParams, $modal, $log, Topic, SubTopic) {
         this.name = 'Topics';
-        this.topics = Topic.query();
+        if ($routeParams.topicId) {
+            this.topics = SubTopic.query({id: $routeParams.topicId});
+        }
+        else {
+            this.topics = Topic.query();
+        }
         this.userIsAuth = function () {
             return $rootScope.user.isAuth;
         }
@@ -132,7 +137,7 @@
                     parentId : parentId,
                     title: title
                 };
-                if (topicId != null) {
+                if (topicId) {
                     Topic.update({id: topicId}, {parentId: parentId, title: title},
                         function(data) {//success
                             if (data) {
@@ -140,7 +145,14 @@
                                 var topics = $scope.topicCtrl.topics;
                                 for (i = topics.length - 1; i >= 0; i--) {
                                     if (topics[i].id === data.id){
-                                        topics[i] = data;
+                                        if (!$routeParams.topicId || $routeParams.topicId != data.parent.id) {
+                                            //remove from current topics
+                                            $scope.topicCtrl.topics.splice(i, 1);
+                                        }
+                                        else {
+                                            //update data in current topics
+                                            topics[i] = data;
+                                        }
                                     }
                                 }
                             }
@@ -153,8 +165,11 @@
                     Topic.save(topic,
                         function(data) {//success
                             if (data) {
-                                //add to topics
-                                $scope.topicCtrl.topics.push(data);
+                                if (($routeParams.topicId && $routeParams.topicId === data.parent.id)
+                                    || (!$routeParams.topicId && !data.parent.id)){
+                                    //add to topics
+                                    $scope.topicCtrl.topics.push(data);
+                                }
                             }
                         },
                         function () {//error

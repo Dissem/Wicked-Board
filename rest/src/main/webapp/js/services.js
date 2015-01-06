@@ -8,6 +8,9 @@
             {'update': {method: 'PUT'}
         });
     });
+    services.factory('SubTopic', function ($resource) {
+        return $resource('rest/topics/:id/topics');
+    });
 
     services.factory('User', function ($resource) {
         return $resource('rest/users/:email',
