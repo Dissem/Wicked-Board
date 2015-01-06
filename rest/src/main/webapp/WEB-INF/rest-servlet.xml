@@ -13,6 +13,8 @@
 
     <import resource="classpath*:serviceContext.xml"/>
     <context:component-scan base-package="ch.bfh.wickedcoders.wickedboard.rest.controller"/>
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven>
+        <mvc:path-matching suffix-pattern="false" />
+    </mvc:annotation-driven>
 
 </beans>

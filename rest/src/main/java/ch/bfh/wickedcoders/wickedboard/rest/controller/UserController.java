@@ -49,6 +49,7 @@ public class UserController {
         System.out.println("User requested with email = " + email + " and password = " + password);
         UserDTO userDTO = userService.read(email);
         if (userDTO != null && userDTO.checkPassword(password)) {
+            userDTO.setPasswordHash(null); // This isn't needed anymore
             return userDTO;
         }
         throw new Exception("invalid credentials");
