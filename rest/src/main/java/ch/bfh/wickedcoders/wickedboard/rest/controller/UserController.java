@@ -23,6 +23,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public UserDTO create(@RequestBody UserDTO user) {
+        user.calculateHash();
+        System.out.println(user);
         UserDTO createdUser = userService.create(user);
         System.out.println("User created with email = " + user.getEmail());
         return createdUser;
@@ -44,7 +46,7 @@ public class UserController {
     @RequestMapping(value = "/{email}", method = RequestMethod.POST)
     @ResponseBody
     public UserDTO read(@PathVariable String email, @RequestBody String password) throws Exception {
-        System.out.println("User requested with email = " + email + "and password = " + password);
+        System.out.println("User requested with email = " + email + " and password = " + password);
         UserDTO userDTO = userService.read(email);
         if (userDTO != null && userDTO.checkPassword(password)) {
             return userDTO;

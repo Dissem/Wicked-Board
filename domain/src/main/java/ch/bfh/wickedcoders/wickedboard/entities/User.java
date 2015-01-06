@@ -46,7 +46,20 @@ public class User implements Serializable {
         return email;
     }
 
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
     public boolean checkPassword(String password) {
         return SecurityUtils.checkPassword(password, passwordHash);
+    }
+
+    @Override
+    public String toString() {
+        return name + " / " + email + " / " + passwordHash;
     }
 }

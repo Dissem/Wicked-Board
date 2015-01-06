@@ -26,7 +26,9 @@ public class DefaultUserService implements UserService {
     @Override
     public UserDTO create(UserDTO userDTO) {
         User user = mapper.map(userDTO, User.class);
+        System.out.println(user);
         User persistedUser = userRepository.save(user);
+        System.out.println(persistedUser);
         return mapper.map(persistedUser, UserDTO.class);
     }
 

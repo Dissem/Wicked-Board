@@ -15,6 +15,8 @@ public class UserDTO implements Serializable {
 
     private String name;
 
+    private String password;
+
     private String passwordHash;
 
     public UserDTO(String name, String email, String password) {
@@ -43,7 +45,24 @@ public class UserDTO implements Serializable {
         return name;
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void calculateHash() {
+        this.passwordHash = SecurityUtils.getHashedPassword(password);
+    }
+
     public boolean checkPassword(String password) {
         return SecurityUtils.checkPassword(password, passwordHash);
+    }
+
+    @Override
+    public String toString() {
+        return name + " / " + email + " / " + password + " / " + passwordHash;
     }
 }
