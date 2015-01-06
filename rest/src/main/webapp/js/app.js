@@ -2,8 +2,9 @@
     var app = angular.module('wickedBoardApp', ['ui.bootstrap', 'ngRoute', 'LocalStorageModule', 'wickedBoardServices']);
     app.config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/', {
-            templateUrl: 'pages/index.html'
-        }).when('/topic', {
+            templateUrl: 'pages/topic.html',
+            controller: 'TopicController'
+        }).when('/topic/:topicId', {
             templateUrl: 'pages/topic.html',
             controller: 'TopicController'
         });
