@@ -38,11 +38,21 @@ public class TopicController {
     /**
      * ReadAll
      */
-    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
+    @RequestMapping(method = RequestMethod.GET)
     public Collection<TopicDTO> list() {
         System.out.println("Collection of Topic requested");
-        return topicService.list();
+        return topicService.list(null);
+    }
+
+    /**
+     * ReadChildren.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/{topicId}/topics", method = RequestMethod.GET)
+    public Collection<TopicDTO> list(@PathVariable final Integer topicId) {
+        System.out.println("Collection of Topic requested");
+        return topicService.list(topicId);
     }
 
     /**

@@ -33,9 +33,9 @@ public class DefaultTopicService implements TopicService {
     }
 
     @Override
-    public Collection<TopicDTO> list() {
+    public Collection<TopicDTO> list(final Integer parentId) {
         return mapper.map(
-                topicRepository.findAll(),
+                topicRepository.findByParentId(parentId),
                 new TypeToken<Collection<TopicDTO>>() {
                 }.getType());
     }

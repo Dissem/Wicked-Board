@@ -12,7 +12,7 @@ import java.util.Collection;
 public interface TopicService {
     public TopicDTO create(TopicDTO topic);
     public TopicDTO read(long id);
-    public Collection<TopicDTO> list();
+    public Collection<TopicDTO> list(final Integer parentId);
     public TopicDTO update(TopicDTO topic);
     public void delete(TopicDTO topic);
 }
