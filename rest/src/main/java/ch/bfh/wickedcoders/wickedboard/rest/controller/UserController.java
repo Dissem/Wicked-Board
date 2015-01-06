@@ -37,7 +37,12 @@ public class UserController {
     @ResponseBody
     public Collection<UserDTO> list() {
         System.out.println("Collection of User requested");
-        return userService.list();
+        Collection<UserDTO> users = userService.list();
+        users.forEach(u -> {
+            u.setPassword(null);
+            u.setPasswordHash(null);
+        });
+        return users;
     }
 
     /**
@@ -50,6 +55,7 @@ public class UserController {
         UserDTO userDTO = userService.read(email);
         if (userDTO != null && userDTO.checkPassword(password)) {
             userDTO.setPasswordHash(null); // This isn't needed anymore
+            System.out.println(userDTO);
             return userDTO;
         }
         throw new Exception("invalid credentials");
