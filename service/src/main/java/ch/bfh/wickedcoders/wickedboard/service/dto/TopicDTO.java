@@ -13,6 +13,7 @@ public class TopicDTO implements Serializable {
 
     private Long id;
     private String title;
+    private Integer parentId;
     private TopicDTO parent;
     private List<LabelDTO> labels = new LinkedList<>();
     private List<GroupDTO> groups = new LinkedList<>();
@@ -39,6 +40,14 @@ public class TopicDTO implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
+    }
+
+    public Integer getParentId() {
+        return parentId;
     }
 
     public void setParent(TopicDTO parent) {

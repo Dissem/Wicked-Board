@@ -22,6 +22,14 @@ public class TopicController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public TopicDTO create(@RequestBody TopicDTO topic) {
+
+        // Read parent topic if topic id is present.
+        if (topic.getParentId() != null && topic.getParent() == null) {
+            final TopicDTO parentTopic = topicService.read(topic.getParentId());
+            topic.setParent(parentTopic);
+        }
+
+        // Save topic
         TopicDTO createTopic = topicService.create(topic);
         System.out.println("Topic created with id = " + createTopic.getId());
         return createTopic;
@@ -53,7 +61,17 @@ public class TopicController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseBody
     public TopicDTO update(@RequestBody TopicDTO topic, @PathVariable long id) {
+
+        // Set topic id according to path variable
         topic.setId(id);
+
+        // Read parent topic if topic id is present.
+        if (topic.getParentId() != null && topic.getParent() == null) {
+            final TopicDTO parentTopic = topicService.read(topic.getParentId());
+            topic.setParent(parentTopic);
+        }
+
+        // Update topic
         TopicDTO updatedTopic = topicService.update(topic);
         System.out.println("Topic updated with id = " + updatedTopic.getId());
         return updatedTopic;
