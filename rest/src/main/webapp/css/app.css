@@ -3,3 +3,10 @@ body {
 }
 /* fix for bootstrap ui */
 .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.pre-wicked {
+    background-color: inherit;
+    border: thin solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+}
