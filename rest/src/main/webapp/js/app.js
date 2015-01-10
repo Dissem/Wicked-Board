@@ -104,17 +104,32 @@
             }
         };
     }]);
-    app.controller('TopicController', ['$rootScope', '$scope', '$routeParams', '$modal', '$log', 'Topic', 'SubTopic', function ($rootScope, $scope, $routeParams, $modal, $log, Topic, SubTopic) {
+    app.controller('TopicController', ['$rootScope', '$scope', '$routeParams', '$modal', '$log', 'Topic', 'SubTopic', 'Post', function ($rootScope, $scope, $routeParams, $modal, $log, Topic, SubTopic, Post) {
         this.name = 'Topics';
+        /**
+         * associative array with topicId as key and topicData as value
+         * @type {{object}}
+         */
+        this.postsForTopicId = {};
         if ($routeParams.topicId) {
             this.topics = SubTopic.query({id: $routeParams.topicId});
         }
         else {
             this.topics = Topic.query();
         }
-        this.userIsAuth = function () {
-            return $rootScope.user.isAuth;
+        /**
+         * checks if the current user is authenticated
+         * @param userEmail optional to check for a specific user
+         * @returns {boolean}
+         */
+        this.userIsAuth = function (userEmail) {
+            return $rootScope.user.isAuth
+                && (!userEmail || $rootScope.user.userData.email === userEmail);
         }
+        /**
+         * deletes the specified topic
+         * @param topic
+         */
         this.delTopic = function (topic) {
             if (this.userIsAuth() && topic) {
                 Topic.delete({id: topic.id},
@@ -130,6 +145,12 @@
                     });
             }
         }
+        /**
+         * saves a topic
+         * @param topicId optional for existing topic
+         * @param parentId
+         * @param title
+         */
         this.saveTopic = function (topicId, parentId, title) {
             if (this.userIsAuth()) {
                 var topic = {
@@ -145,7 +166,8 @@
                                 var topics = $scope.topicCtrl.topics;
                                 for (i = topics.length - 1; i >= 0; i--) {
                                     if (topics[i].id === data.id){
-                                        if (!$routeParams.topicId || $routeParams.topicId != data.parent.id) {
+                                        if ((!$routeParams.topicId && data.parentId)
+                                            || $routeParams.topicId != data.parentId) {
                                             //remove from current topics
                                             $scope.topicCtrl.topics.splice(i, 1);
                                         }
@@ -165,19 +187,23 @@
                     Topic.save(topic,
                         function(data) {//success
                             if (data) {
-                                if (($routeParams.topicId && $routeParams.topicId === data.parent.id)
-                                    || (!$routeParams.topicId && !data.parent.id)){
+                                if (($routeParams.topicId && $routeParams.topicId == data.parentId)
+                                    || (!$routeParams.topicId && !data.parentId)){
                                     //add to topics
                                     $scope.topicCtrl.topics.push(data);
                                 }
                             }
                         },
                         function () {//error
-                            $log.info("couldn't update topic");
+                            $log.info("couldn't insert topic");
                         });
                 }
             }
         }
+        /**
+         * show topic editor for new and existing
+         * @param topicId optional for existing topic
+         */
         this.showTopic = function (topicId) {
             if (this.userIsAuth()) {
                 var topic = {};
@@ -197,7 +223,7 @@
                         data: function () {
                             return {
                                 title: (topicId) ? 'Edit Topic' : 'New Topic',
-                                topics: $scope.topicCtrl.topics,
+                                topics: (topicId) ? topic.parent : Topic.query(),
                                 modalData: {
                                     topic: topic
                                 }
@@ -214,5 +240,142 @@
                 });
             }
         };
+        /**
+         * toggle post visibility for the specified topic
+         * reads all posts for the topic if necessary
+         * @param topicId
+         */
+        this.togglePosts = function(topicId) {
+            if (topicId) {
+                //check for existing data
+                var topicData = this.postsForTopicId[topicId];
+                if (!topicData){
+                    topicData = {};
+                    //read and display posts for topic
+                    topicData.visible = true;
+                    topicData.posts = Post.query({topicId: topicId});
+                    if (!topicData.posts){
+                        //no posts yet...
+                        //init array
+                        topicData.posts = [];
+                    }
+                    this.postsForTopicId[topicId] = topicData;
+                }
+                else {
+                    //toggle visibility
+                    topicData.visible = !topicData.visible;
+                }
+            }
+        }
+        /**
+         * deletes the specified post
+         * @param post
+         */
+        this.delPost = function (post) {
+            if (post && this.userIsAuth()) {
+                Post.delete({topicId: post.topic.id, id: post.id},
+                    function() {//success
+                        //remove from posts
+                        var index = $scope.topicCtrl.postsForTopicId[post.topic.id].posts.indexOf(post);
+                        if (index >= 0){
+                            $scope.topicCtrl.postsForTopicId[post.topic.id].posts.splice(index, 1);
+                        }
+                    },
+                    function () {//error
+                        $log.info("couldn't delete post");
+                    });
+            }
+        }
+        /**
+         * saves a new or existing post
+         * @param postId optional for existing post
+         * @param topicId
+         * @param title
+         * @param text
+         */
+        this.savePost = function (postId, topicId, title, text) {
+            if (this.userIsAuth() && topicId) {
+                var post = {
+                    id: postId,
+                    topic: {id: topicId},
+                    title: title,
+                    text : text,
+                    email: $rootScope.user.userData.email
+                };
+                if (postId) {
+                    Post.update({topicId: post.topic.id, id: postId}, post,
+                        function(data) {//success
+                            if (data) {
+                                //update posts
+                                var posts = $scope.topicCtrl.postsForTopicId[data.topic.id].posts;
+                                for (i = posts.length - 1; i >= 0; i--) {
+                                    if (posts[i].id === data.id){
+                                        //update data in posts
+                                        posts[i] = data;
+                                    }
+                                }
+                            }
+                        },
+                        function () {//error
+                            $log.info("couldn't update post");
+                        });
+                }
+                else {
+                    Post.save({topicId: post.topic.id}, post,
+                        function(data) {//success
+                            if (data) {
+                                //add to posts
+                                $scope.topicCtrl.postsForTopicId[data.topic.id].posts.push(data);
+                            }
+                        },
+                        function () {//error
+                            $log.info("couldn't insert post");
+                        });
+                }
+            }
+        }
+        /**
+         * show post editor for new and existing
+         * @param topicId
+         * @param postId optional for existing post
+         */
+        this.showPost = function (topicId, postId) {
+            if (this.userIsAuth() && topicId) {
+                var post = { topic: {id: topicId} };
+                if (postId){
+                    post = Post.get({topicId: topicId, id: postId},
+                        function(data) {//success
+                            //check for edit-permission on post
+                            $scope.topicCtrl.userIsAuth(data.user.email);
+                        },
+                        function () {//error
+                            $log.info("couldn't get post");
+                        });
+                }
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'pages/postForm.html',
+                    controller: 'ModalController as modalCtrl',
+                    resolve: {
+                        data: function () {
+                            return {
+                                title: (post.postId) ? 'Edit Post' : 'New Post',
+                                modalData: {
+                                    post: post
+                                }
+                            };
+                        }
+                    }
+                });
+                modalInstance.result.then(function (modalData) {
+                    $scope.topicCtrl.savePost(modalData.post.id,
+                        modalData.post.topic.id,
+                        modalData.post.title,
+                        modalData.post.text);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            }
+        }
     }]);
 })();

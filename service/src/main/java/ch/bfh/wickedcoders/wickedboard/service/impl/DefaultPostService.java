@@ -4,6 +4,7 @@ import ch.bfh.wickedcoders.wickedboard.entities.Post;
 import ch.bfh.wickedcoders.wickedboard.repository.PostRepository;
 import ch.bfh.wickedcoders.wickedboard.service.PostService;
 import ch.bfh.wickedcoders.wickedboard.service.TopicService;
+import ch.bfh.wickedcoders.wickedboard.service.UserService;
 import ch.bfh.wickedcoders.wickedboard.service.dto.PostDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -11,6 +12,7 @@ import org.modelmapper.TypeToken;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,11 +30,21 @@ public class DefaultPostService implements PostService {
     @Inject
     private PostRepository postRepository;
 
+    @Inject
+    private UserService userService;
+
     private ModelMapper mapper = new ModelMapper();
 
     @Override
     public PostDTO create(long topicId, PostDTO postDTO) {
         postDTO.setTopic(topicService.read(topicId));
+        if (postDTO.getUser() == null) {
+            //read user if not set
+            postDTO.setUser(userService.read(postDTO.getEmail()));
+        }
+        LocalDateTime dateNow = LocalDateTime.now();
+        postDTO.setCreated(dateNow);
+        postDTO.setEdited(dateNow);
         Post post = mapper.map(postDTO, Post.class);
         post = postRepository.save(post);
         return mapper.map(post, PostDTO.class);
@@ -54,6 +66,12 @@ public class DefaultPostService implements PostService {
     @Override
     public PostDTO update(long topicId, PostDTO postDTO) {
         postDTO.setTopic(topicService.read(topicId));
+        if (postDTO.getUser() == null) {
+            //read user if not set
+            postDTO.setUser(userService.read(postDTO.getEmail()));
+        }
+        LocalDateTime dateNow = LocalDateTime.now();
+        postDTO.setEdited(dateNow);
         Post post = mapper.map(postDTO, Post.class);
         post = postRepository.save(post);
         return mapper.map(post, PostDTO.class);

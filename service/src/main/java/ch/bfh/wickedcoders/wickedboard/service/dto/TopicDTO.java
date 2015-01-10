@@ -13,14 +13,10 @@ public class TopicDTO implements Serializable {
 
     private Long id;
     private String title;
-    private Integer parentId;
+    private Long parentId;
     private TopicDTO parent;
     private List<LabelDTO> labels = new LinkedList<>();
     private List<GroupDTO> groups = new LinkedList<>();
-
-    public TopicDTO(String title) {
-        this.title = title;
-    }
 
     public TopicDTO() {
         // JPA
@@ -42,16 +38,19 @@ public class TopicDTO implements Serializable {
         return title;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
     public void setParent(TopicDTO parent) {
         this.parent = parent;
+        if (this.parent != null) {
+            setParentId(this.parent.getId());
+        }
     }
 
     public TopicDTO getParent() {

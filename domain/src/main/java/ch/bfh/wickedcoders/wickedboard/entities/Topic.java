@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -22,7 +23,7 @@ public class Topic implements Serializable {
     private Long id;
 
     private String title;
-    @OneToOne(cascade = ALL, fetch = EAGER)
+    @OneToOne(cascade = MERGE, fetch = EAGER)
     private Topic parent;
     @ManyToMany(cascade = ALL, fetch = EAGER)
     private List<Label> labels = new LinkedList<>();

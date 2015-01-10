@@ -5,11 +5,17 @@
     services.factory('Topic', function ($resource) {
         return $resource('rest/topics/:id',
             null,
-            {'update': {method: 'PUT'}
-        });
+            {'update': {method: 'PUT'}}
+        );
     });
     services.factory('SubTopic', function ($resource) {
         return $resource('rest/topics/:id/topics');
+    });
+    services.factory('Post', function ($resource) {
+        return $resource('rest/topics/:topicId/posts/:id',
+            null,
+            {'update': {method: 'PUT'}}
+        );
     });
 
     services.factory('User', function ($resource) {

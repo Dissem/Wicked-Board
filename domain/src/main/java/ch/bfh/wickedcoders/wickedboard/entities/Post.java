@@ -3,7 +3,7 @@ package ch.bfh.wickedcoders.wickedboard.entities;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -17,25 +17,26 @@ public class Post {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = ALL, fetch = EAGER)
+    @ManyToOne(cascade = MERGE, fetch = EAGER)
     private Topic topic;
     private String title;
     private String text;
+    @Column(updatable = false)
     private LocalDateTime created;
     private LocalDateTime edited;
-    @OneToOne(cascade = ALL, fetch = EAGER)
+    @OneToOne(cascade = MERGE, fetch = EAGER)
     private User user;
-
-    public Post(Topic topic, String title, String text, User user) {
-        this.topic = topic;
-        this.title = title;
-        this.text = text;
-        this.created = LocalDateTime.now();
-        this.user = user;
-    }
 
     public Post() {
         // JPA
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setTopic(Topic topic) {

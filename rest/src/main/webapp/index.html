@@ -18,12 +18,12 @@
    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Wicked Board</a>
+                <a class="navbar-brand" href="#/">Wicked Board</a>
             </div>
             <div class="collapse navbar-collapse navbar-right" ng-controller="UserController as userCtrl">
                 <div ng-show="user.isAuth">
                     <span class="navbar-text">Signed in as {{user.userData.name}}</span>
-                    <a class="navbar-link" ng-click="userCtrl.logout()">Logout</a>
+                    <a href class="navbar-link" ng-click="userCtrl.logout()">Logout</a>
                 </div>
                 <div ng-show="!user.isAuth">
                     <a href class="navbar-link" ng-click="userCtrl.showLogin()">Login</a>
