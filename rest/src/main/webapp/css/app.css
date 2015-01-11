@@ -10,3 +10,7 @@ body {
     max-height: 200px;
     overflow-y: auto;
 }
+
+span.pull-right a {
+    color: white;
+}

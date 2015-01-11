@@ -106,17 +106,38 @@
     }]);
     app.controller('TopicController', ['$rootScope', '$scope', '$routeParams', '$modal', '$log', 'Topic', 'SubTopic', 'Post', function ($rootScope, $scope, $routeParams, $modal, $log, Topic, SubTopic, Post) {
         this.name = 'Topics';
+        this.isSubTopic = false;
+
         /**
          * associative array with topicId as key and topicData as value
          * @type {{object}}
          */
+        var me = this;
         this.postsForTopicId = {};
         if ($routeParams.topicId) {
-            this.topics = SubTopic.query({id: $routeParams.topicId});
+            this.isSubTopic = true;
+            this.topics = SubTopic.query({id: $routeParams.topicId}, function (data) {
+                me.resolveParent(data);
+            });
         }
         else {
-            this.topics = Topic.query();
+            this.topics = Topic.query({}, function (data) {
+                me.resolveParent(data);
+            });
         }
+
+        /**
+         * Resolve parent topic name.
+         * @param data the topic list retrieved by REST.
+         */
+        this.resolveParent = function(data) {
+            if (data && data.length > 0) {
+                if (data[0].parent && data[0].parent.title) {
+                    this.name = "Topics of " + data[0].parent.title;
+                }
+            }
+        };
+
         /**
          * checks if the current user is authenticated
          * @param userEmail optional to check for a specific user
@@ -125,7 +146,7 @@
         this.userIsAuth = function (userEmail) {
             return $rootScope.user.isAuth
                 && (!userEmail || $rootScope.user.userData.email === userEmail);
-        }
+        };
         /**
          * deletes the specified topic
          * @param topic
@@ -144,7 +165,7 @@
                         $log.info("couldn't delete topic");
                     });
             }
-        }
+        };
         /**
          * saves a topic
          * @param topicId optional for existing topic
@@ -199,7 +220,7 @@
                         });
                 }
             }
-        }
+        };
         /**
          * show topic editor for new and existing
          * @param topicId optional for existing topic
@@ -266,7 +287,7 @@
                     topicData.visible = !topicData.visible;
                 }
             }
-        }
+        };
         /**
          * deletes the specified post
          * @param post
@@ -285,7 +306,7 @@
                         $log.info("couldn't delete post");
                     });
             }
-        }
+        };
         /**
          * saves a new or existing post
          * @param postId optional for existing post
@@ -333,7 +354,7 @@
                         });
                 }
             }
-        }
+        };
         /**
          * show post editor for new and existing
          * @param topicId
@@ -376,6 +397,6 @@
                     $log.info('Modal dismissed at: ' + new Date());
                 });
             }
-        }
+        };
     }]);
 })();

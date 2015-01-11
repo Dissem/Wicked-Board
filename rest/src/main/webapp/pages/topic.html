@@ -1,16 +1,24 @@
 <div class="container">
     <div ng-controller="TopicController as topicCtrl">
         <ul>
-            <div class="list-group-item active"><h3 class="list-group-item-heading" ng-bind="topicCtrl.name"></h3></div>
+            <div class="list-group-item active">
+                <span class="pull-right" ng-show="topicCtrl.isSubTopic">
+                    <a href="#/">back to index</a>
+                </span>
+                <h3 class="list-group-item-heading" ng-bind="topicCtrl.name"></h3>
+            </div>
+            <div class="list-group-item" ng-show="!topicCtrl.topics || topicCtrl.topics.length == 0">
+                <strong>Hint:</strong> There are no topics yet existing.
+            </div>
             <li class="list-group-item" ng-repeat="topic in topicCtrl.topics | orderBy:'title'">
                 <span class="pull-left">
-                    <a title="toggle posts" ng-click="topicCtrl.togglePosts(topic.id)">
+                    <a href title="toggle posts" ng-click="topicCtrl.togglePosts(topic.id)">
                         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"
                               ng-show="!topicCtrl.postsForTopicId[topic.id].visible"></span>
                         <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"
                               ng-show="topicCtrl.postsForTopicId[topic.id].visible"></span>
-                    </a>&nbsp;&nbsp;
-                </span>
+                    </a>
+                </span>&nbsp;&nbsp;
                 <a href="#/topic/{{topic.id}}" title="show sub topic" ng-click="topicCtrl.showSubTopic(topic.id)"
                         ng-show="!topic.parent">
                     <strong ng-bind="topic.title"></strong>
@@ -30,6 +38,9 @@
                             ng-click="topicCtrl.showPost(topic.id)" ng-show="topicCtrl.userIsAuth()">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Post
                     </button>
+                    </div>
+                    <div ng-show="!topicCtrl.postsForTopicId[topic.id].posts || topicCtrl.postsForTopicId[topic.id].posts == 0">
+                        There are currently no posts in this topic.
                     </div>
                     <div class="panel-group"
                          ng-repeat="post in topicCtrl.postsForTopicId[topic.id].posts | orderBy:'createdDate':true">
@@ -63,8 +74,8 @@
                     </div>
                 </div>
             </li>
-            <li class="list-group-item disabled">
-                <button class="btn btn-primary" ng-click="topicCtrl.showTopic()" ng-show="topicCtrl.userIsAuth()">
+            <li class="list-group-item disabled" ng-show="topicCtrl.userIsAuth()">
+                <button class="btn btn-primary" ng-click="topicCtrl.showTopic()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> New Topic
                 </button>
             </li>
