@@ -32,7 +32,7 @@
                     </button>
                     </div>
                     <div class="panel-group"
-                         ng-repeat="post in topicCtrl.postsForTopicId[topic.id].posts | orderBy:'createdDate'">
+                         ng-repeat="post in topicCtrl.postsForTopicId[topic.id].posts | orderBy:'createdDate':true">
                         <div class="panel panel-success" ng-show="topicCtrl.userIsAuth(post.user.email)">
                             <div class="panel-heading">
                                 {{post.title}} - posted on {{post.editedDate | date:"EEEE, MMMM d, yyyy 'at' HH:mm"}}
