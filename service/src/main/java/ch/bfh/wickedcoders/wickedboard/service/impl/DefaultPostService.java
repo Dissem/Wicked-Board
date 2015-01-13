@@ -65,16 +65,26 @@ public class DefaultPostService implements PostService {
 
     @Override
     public PostDTO update(long topicId, PostDTO postDTO) {
-        postDTO.setTopic(topicService.read(topicId));
-        if (postDTO.getUser() == null) {
-            //read user if not set
-            postDTO.setUser(userService.read(postDTO.getEmail()));
+        //read to set created date (never changes)
+        Post postDB = postRepository.findByTopicIdAndId(topicId, postDTO.getId());
+        if (postDB != null) {
+            //set created from db
+            postDTO.setCreated(postDB.getCreated());
+
+            postDTO.setTopic(topicService.read(topicId));
+            if (postDTO.getUser() == null) {
+                //read user if not set
+                postDTO.setUser(userService.read(postDTO.getEmail()));
+            }
+            LocalDateTime dateNow = LocalDateTime.now();
+            postDTO.setEdited(dateNow);
+            Post post = mapper.map(postDTO, Post.class);
+            post = postRepository.save(post);
+            return mapper.map(post, PostDTO.class);
         }
-        LocalDateTime dateNow = LocalDateTime.now();
-        postDTO.setEdited(dateNow);
-        Post post = mapper.map(postDTO, Post.class);
-        post = postRepository.save(post);
-        return mapper.map(post, PostDTO.class);
+        else {
+            return null;
+        }
     }
 
     @Override

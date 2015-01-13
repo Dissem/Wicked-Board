@@ -21,7 +21,6 @@ public class Post {
     private Topic topic;
     private String title;
     private String text;
-    @Column(updatable = false)
     private LocalDateTime created;
     private LocalDateTime edited;
     @OneToOne(cascade = MERGE, fetch = EAGER)
